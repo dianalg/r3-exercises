@@ -2,8 +2,4 @@
 title: "Welcome"
 ---
 
-<<<<<<< HEAD
-Hello, Github!
-=======
-Hello, RStudio!
->>>>>>> 79c72ad (update index - edit from RStudio)
+Hello, everyone!
