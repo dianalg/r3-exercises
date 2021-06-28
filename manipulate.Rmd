@@ -1,0 +1,159 @@
+---
+title: "Manipulate"
+author: "Diana LaScala-Gruenewald"
+date: "6/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read online table
+
+### Download table ('*.csv')
+
+```{r}
+# Set variables
+csv_url <- 'https://oceanview.pfeg.noaa.gov/erddap/tabledap/cciea_AC.csv'
+dir_data <- 'data'
+
+# Create derived variables
+csv <- file.path(dir_data, basename(csv_url))
+
+# Create directory
+dir.create(dir_data)
+
+# Download data
+download.file(csv_url, csv)
+```
+### Read table `read.csv()`
+
+```{r}
+# Read data
+d <- read.csv(csv)
+
+# Show
+# head(d)
+```
+The second line contains the units; we want to skip this.
+
+```{r}
+# Read data, skipping first two lines, no header
+d <- read.csv(csv, skip=2, header=F)
+
+# Update column names
+names(d) <- names(read.csv(csv))
+#head(d)
+```
+We can render these data frames in a nicer way.
+
+### Show table `DT::datatable()`
+
+```{r}
+# Show table
+DT::datatable(d)
+```
+
+## Wrangle data
+
+### Manipulate with `dplyr`
+
+```{r}
+library(DT)
+library(dplyr)
+
+d <- d %>%
+  # Transform to tibble
+  tibble() %>%
+  # Change time from str to datetime
+  mutate(
+    time = as.Date(substr(time, 1, 10))
+  ) %>%
+  # Select columns that start with total_fisheries_revenue
+  select(
+    time,
+    starts_with('total_fisheries_revenue')
+  ) %>%
+  # Filter for rows in the last 40 years
+  filter(
+    time >= as.Date('1981-01-01')
+  )
+
+datatable(d)
+```
+
+## Tidy with `tidyr`
+
+```{r}
+library(tidyr)
+
+d <- d %>%
+  # Change from wide to long format
+  pivot_longer(-time)
+
+datatable(d)
+```
+
+## Summarize wiht `dplyr`
+
+```{r}
+library(stringr)
+
+# Get region column
+d <- d %>%
+  # Replace total_fisheries_revenue in name column with ''
+  mutate(
+    region = str_replace(name, 'total_fisheries_revenue_', '')
+  ) %>%
+  # Select time, region, and value columns (don't need name anymore)
+  select(
+    time,
+    region,
+    value
+  )
+
+# Find average revenue by region
+d_sum <- d %>%
+  # Group by region
+  group_by(region) %>%
+  # Take the mean
+  summarize(
+    avg_revenue = mean(value)
+  )
+
+# Show data table with the avg_revenue column formatted as currency
+datatable(d_sum) %>%
+  formatCurrency('avg_revenue')
+```
+
+## Apply functions with `purrr` on a `nest`'ed `tibble`
+
+```{r}
+library(purrr)
+
+# Create nest
+n <- d %>%
+  # Create grouping variable (region)
+  group_by(region) %>%
+  # Create nest of paired date, revenue points for each region
+  nest(
+    data = c(time, value)
+  )
+
+n <- n %>%
+  # Create new columns lm and trend containing a linear model (revenue ~ date) and its slope
+  mutate(
+    lm = map(data, function(d){
+      lm(value ~ time, d)
+    }),
+    trend = map_dbl(lm, function(m){
+      coef(summary(m))['time', 'estimate']
+    })
+  )
+
+# Select just the region and the trend (slope) and display
+n %>%
+  select(region, trend) %>%
+  datatable()
+```
