@@ -148,7 +148,7 @@ n <- n %>%
       lm(value ~ time, d)
     }),
     trend = map_dbl(lm, function(m){
-      coef(summary(m))['time', 'estimate']
+      coef(summary(m))['time', 'Estimate']
     })
   )
 
