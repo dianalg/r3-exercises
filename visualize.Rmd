@@ -1,0 +1,34 @@
+---
+title: "visualize"
+author: "Diana LaScala-Gruenewald"
+date: "7/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read Data
+
+```{r}
+# load libraries
+library(here)
+library(readr)
+library(DT)
+
+# define variables
+url_ac <- 'https://oceanview.pfeg.noaa.gov/erddap/tabledap/cciea_AC.csv'
+csv_ac <- here('data/cciea_AC_url_download.csv')
+
+# Download data
+if (!file.exists(csv_ac))  # No {}?
+  download.file(url_ac, csv_ac)
+
+# Read data
+d_ac <- read_csv(csv_ac, col_names=F, skip=2)
+names(d_ac) <- names(read_csv(csv_ac))
+
+# Show data
+datatable(d_ac)
+```
