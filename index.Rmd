@@ -3,3 +3,5 @@ title: "Welcome"
 ---
 
 Hello, everyone!
+
+These pages are the result of following along with the lessons from the [r3 course](https://noaa-iea.github.io/r3-train/) run in summer 2022.

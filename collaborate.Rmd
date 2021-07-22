@@ -1,5 +1,10 @@
 ---
 title: "Collaborate"
+author: "Diana LaScala-Gruenewald"
+date: "6/21/2021"
+output: html_document
 ---
 
 Like branches of a tree.
+
+This is the result from the [Collaborate lesson](https://noaa-iea.github.io/r3-train/collaborate.html).
