@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Diana LaScala-Gruenewald" />
+
+
+<title>Report with Rmd Options</title>
+
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R<sup>3</sup> Exercises</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html"></a>
+</li>
+<li>
+  <a href="collaborate.html">Collaborate</a>
+</li>
+<li>
+  <a href="manipulate.html">Manipulate</a>
+</li>
+<li>
+  <a href="visualize.html">Visualize</a>
+</li>
+<li>
+  <a href="map.html">Map</a>
+</li>
+<li>
+  <a href="report.html">Report</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Report with Rmd Options</h1>
+<h4 class="author">Diana LaScala-Gruenewald</h4>
+<h4 class="date">7/23/2021</h4>
+
+</div>
+
+
+<div id="setup" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Setup</h1>
+<p>The easiest way to create a website is to start a new project in RStudio and select the website template. This will create the desired file structure. This structure includes:</p>
+<ul>
+<li><code>_site.yml</code> - how you control navigation for your website</li>
+<li><code>index.Rmd</code> - which you can edit in Rmarkdown to create content</li>
+</ul>
+<p>If you knit with just the default template, you will already have a simple website.</p>
+</div>
+<div id="add-options" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Add options</h1>
+<p>Now let’s add some options. The easiest way to do this is to click on the gear icon and select Output Options. Select “Include table of contents” and “Number section headings.” You will see the yml at the top of the Rmarkdown file change.</p>
+<div id="here-is-a-subheading" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Here is a subheading</h2>
+<div id="here-is-a-sub-subheading." class="section level3" number="2.1.1">
+<h3 number="2.1.1"><span class="header-section-number">2.1.1</span> Here is a sub-subheading.</h3>
+<p>See how the numbers increment?</p>
+</div>
+</div>
+</div>
+<div id="add-options-continued" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Add options continued</h1>
+<p>Other useful options include adding <code>toc_float: True</code> to the yml to create a floating table of contents, or <code>code_folding: hide</code> to the yml to hide the code. The latter will give you a button to open or close the code provided that <code>echo = True</code>. You can set echo in the “r setup” chunk at the top of the Rmarkdown file, or for each chunk individually.</p>
+<p>Try code folding with this code chunk:</p>
+<pre class="r"><code>print(&#39;Hello world.&#39;)</code></pre>
+<pre><code>## [1] &quot;Hello world.&quot;</code></pre>
+</div>
+<div id="add-equations" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Add equations</h1>
+<p>To add equations, enclose the equation with two dollar signs on each end.</p>
+<p><span class="math display">\[
+E = mc^2
+\]</span></p>
+</div>
+<div id="add-tables" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> Add tables</h1>
+<p>To add a table, if you have the data set, it’s best to just use <code>knitr::kable(my_dataframe)</code>.</p>
+<p>You can also copy and paste from an Excel spreadsheet into the visual editor, and it’ll create the Rmarkdown syntax automatically in the .Rmd file. You really don’t want to create a data table by hand in Rmarkdown if you can help it.</p>
+<table>
+<colgroup>
+<col width="16%" />
+<col width="23%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>date_email</th>
+<th>date_dive_start</th>
+<th>rov_name</th>
+<th>rov_code</th>
+<th>dive_num</th>
+<th>request_num</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3/11/21</td>
+<td>12/7/20</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4317</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>3/11/21</td>
+<td>12/7/20</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4317</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>3/11/21</td>
+<td>12/8/20</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4318</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>3/11/21</td>
+<td>12/9/20</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4319</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>3/11/21</td>
+<td>12/9/20</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4320</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>4/25/21</td>
+<td>3/3/21</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4321</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>4/25/21</td>
+<td>3/4/21</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4322</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>4/25/21</td>
+<td>3/8/21</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4323</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>4/25/21</td>
+<td>3/9/21</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4324</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>4/25/21</td>
+<td>3/10/21</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4325</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td>4/25/21</td>
+<td>3/10/21</td>
+<td>Ventana</td>
+<td>988</td>
+<td>4326</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="customizing-webpage-themes-using-bslib" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Customizing webpage themes using <code>bslib</code></h1>
+<p>Bootstrap themes can be used for both webpages and shiny apps. The default is Bootstrap 4. You can change color schemes and other aesthetic parameters easily with <code>bslib</code> just by changing a few parameters in the yml part of the Rmarkdown file.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
