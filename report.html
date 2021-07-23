@@ -12,7 +12,7 @@
 <meta name="author" content="Diana LaScala-Gruenewald" />
 
 
-<title>Collaborate</title>
+<title>Report</title>
 
 <script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -272,15 +272,70 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Collaborate</h1>
+<h1 class="title toc-ignore">Report</h1>
 <h4 class="author">Diana LaScala-Gruenewald</h4>
-<h4 class="date">6/21/2021</h4>
+<h4 class="date">7/23/2021</h4>
 
 </div>
 
 
-<p>Like branches of a tree.</p>
-<p>This is the result from the <a href="https://noaa-iea.github.io/r3-train/collaborate.html">Collaborate lesson</a>.</p>
+<div id="rmarkdown-basics" class="section level2">
+<h2>Rmarkdown basics</h2>
+<p>This lesson is intended to be a sampler of the different products you can generate using Rmarkdown. A number of example projects have been created in the <a href="https://github.com/bbest/r3-exercises">r3-exercises repo</a> if you want to look at the code in detail.</p>
+<p>First, let’s just review some terms and resources.</p>
+<p><strong>YAML</strong> - Yet Another Markup Language. The first text at the top of a Rmarkdown file is in YAML. YAML files can store stripped-down hierarchical information and are commonly used to store configuration parameters.</p>
+<p><strong>Rmarkdown Cheatsheets</strong> - can be used as references.</p>
+<p><strong>RStudio’s Visual Markdown Editor</strong> - a tool in RStudio to edit a Rmarkdown file without having to use the markdown syntax.</p>
+<p><strong>R code</strong> - can be shown in chunks (using the three back ticks syntax) or inline (using a single back tick).</p>
+<p><strong>Helpers within RStudio</strong> - table of contents sidebar - chunk dropdown menu for navigation - knit gear icon with options - insert chunk button</p>
+<p>It is possible to insert <strong>equations, tables, and references</strong> (the latter using <code>citr</code>) in Rmarkdown files.</p>
+<p><strong>pandoc</strong> - a utility program written in Haskell that does the rendering for Rmarkdown files. It allows the generation of docx and pdf files, among others. It’s good to know about, because sometimes you may want to set pandoc options.</p>
+<p><strong>Output formats</strong> - html is great for the web - you can insert and tailor a table of contents - you can toggle whether you want to show or hide blocks of code - docx is helpful for colleagues who don’t want to work with GitHub or Rmarkdown. Track changes can then be used in Word. There’s no good way to go automatically from a word document back to Rmarkdown yet. - pdf is nice for archival and for having a pretty final product</p>
+<p><strong>bslib</strong> - bootstrap lib. Bootstrap provides the most common set of components when looking at menus, buttons, forms, etc. on the web. <code>bslib</code> handles the aesthetics of all of these components as you work on a webpage.</p>
+</div>
+<div id="rmarkdown-formats" class="section level2">
+<h2>Rmarkdown formats</h2>
+<p>There are many, many types of Rmarkdown products, including websites, presentations, books, and others. Browse them <a href="https://rmarkdown.rstudio.com/formats.html">here</a>.</p>
+<p>We’re going to look at example products in a couple of different formats.</p>
+<div id="website" class="section level3">
+<h3>Website</h3>
+<p>Here is a simple <a href="https://bbest.github.io/r3-exercises/report-website/">website example</a>.</p>
+<p>The example renders a simple data table, but it has some features: - A grouping extension has been added - Each cell is a link to a dedicated webpage for a particular indicator - Each webpage for an indicator contains a dygraph</p>
+<p>It takes advantage of a <strong>parameterized report</strong>. - The parameters get set in the YAML header - Iteratively renders each indicator into it’s own dedicated page</p>
+<p>So, for example, the following Rmarkdown file contains the parameters <code>year</code>, <code>region</code>, <code>printcode</code>, and <code>data</code>.</p>
+<pre><code>---
+title: My Document
+output: html_document
+params:
+  year: 2020
+  region: Europe
+  printcode: TRUE
+  data: file.csv
+---</code></pre>
+<p>You can also create a <strong>GitHub Action</strong> that will download updated data and re-render the website automatically on a schedule (e.g. once per month). This will work on any R code that will run within an hour on a simple machine.</p>
+<p>See <code>report-webpage.Rmd</code> for a walk through on building a simple website.</p>
+</div>
+<div id="dashboard-with-flexdashboard" class="section level3">
+<h3>Dashboard with <code>flexdashboard</code></h3>
+<p>We’re going to look at a dashboard generated using the <code>flexdashboard</code> package, although there are many other packages you can use that provide different types of dashboards. Here is an <a href="https://bbest.github.io/r3-exercises/report-dashboard/">example</a>.</p>
+<p>This example shows a number of ecological indicators through time for a bunch of different regions of interest. These are presented as dygraphs. If you zoom in on one plot, all plots across all pages zoom too. To do that, we append each plot into an Rmarkdown document, with information about the index, data, and plot.</p>
+<p>In the <a href="https://github.com/bbest/r3-exercises/tree/main/report-dashboard">code</a>, we add an <code>indicator_expand.Rmd</code> file. This is a template where we can iterate through all of our indicators, and the indicator name from the <code>index.Rmd</code> file gets subbed in as a third-level header for the <code>{{name}}</code> variable. Similarly, the indicator data gets subbed in as an argument in the <code>read_csv()</code> function for the <code>{{data.csv}}</code> variable.</p>
+</div>
+<div id="book-using-bookdown" class="section level3">
+<h3>Book using <code>bookdown</code></h3>
+<p>Books can be created using the <code>bookdown</code> package; they can be searched and rendered as .pdf or .docx. <a href="https://bbest.github.io/r3-exercises/report-book/">Here</a> is an example book.</p>
+<p>This example shows how to add equations and references.</p>
+</div>
+<div id="slideshow-using-xaringan" class="section level3">
+<h3>Slideshow using <code>xaringan</code></h3>
+<p>You can create slides using the <code>xaringan</code> package. <a href="https://www.jvcasillas.com/ru_xaringan/slides/index.html#1">Here</a> is an example slide deck.</p>
+<p>You can have tables, code, equations, and even interactive graphs in your slides.</p>
+</div>
+<div id="article" class="section level3">
+<h3>Article</h3>
+<p>You can create a journal article using the <code>rticles</code> package. The <a href="https://github.com/bbest/r3-exercises/blob/main/report-article/report-article.pdf">example article</a> is formated for Elsevier, but there are other formats available.</p>
+</div>
+</div>
 
 
 

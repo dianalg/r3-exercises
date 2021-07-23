@@ -1,0 +1,111 @@
+---
+title: "Report"
+author: "Diana LaScala-Gruenewald"
+date: "7/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Rmarkdown basics
+
+This lesson is intended to be a sampler of the different products you can generate using Rmarkdown. A number of example projects have been created in the [r3-exercises repo](https://github.com/bbest/r3-exercises) if you want to look at the code in detail.
+
+First, let's just review some terms and resources.
+
+**YAML** - Yet Another Markup Language. The first text at the top of a Rmarkdown file is in YAML. YAML files can store stripped-down hierarchical information and are commonly used to store configuration parameters. 
+
+**Rmarkdown Cheatsheets** - can be used as references.
+
+**RStudio's Visual Markdown Editor** - a tool in RStudio to edit a Rmarkdown file without having to use the markdown syntax.
+
+**R code** - can be shown in chunks (using the three back ticks syntax) or inline (using a single back tick).
+
+**Helpers within RStudio**
+- table of contents sidebar
+- chunk dropdown menu for navigation
+- knit gear icon with options
+- insert chunk button
+
+It is possible to insert **equations, tables, and references** (the latter using `citr`) in Rmarkdown files.
+
+**pandoc** - a utility program written in Haskell that does the rendering for Rmarkdown files. It allows the generation of docx and pdf files, among others. It's good to know about, because sometimes you may want to set pandoc options.
+
+**Output formats**
+- html is great for the web
+  - you can insert and tailor a table of contents
+  - you can toggle whether you want to show or hide blocks of code
+- docx is helpful for colleagues who don't want to work with GitHub or Rmarkdown. Track changes can then be used in Word. There's no good way to go automatically from a word document back to Rmarkdown yet.
+- pdf is nice for archival and for having a pretty final product
+
+**bslib** - bootstrap lib. Bootstrap provides the most common set of components when looking at menus, buttons, forms, etc. on the web. `bslib` handles the aesthetics of all of these components as you work on a webpage.
+
+## Rmarkdown formats
+
+There are many, many types of Rmarkdown products, including websites, presentations, books, and others. Browse them [here](https://rmarkdown.rstudio.com/formats.html).
+
+We're going to look at example products in a couple of different formats.
+
+### Website
+
+Here is a simple [website example](https://bbest.github.io/r3-exercises/report-website/).
+
+The example renders a simple data table, but it has some features:
+- A grouping extension has been added
+- Each cell is a link to a dedicated webpage for a particular indicator
+- Each webpage for an indicator contains a dygraph
+
+It takes advantage of a **parameterized report**.
+- The parameters get set in the YAML header
+- Iteratively renders each indicator into it's own dedicated page
+
+So, for example, the following Rmarkdown file contains the parameters `year`, `region`, `printcode`, and `data`.
+
+```{}
+---
+title: My Document
+output: html_document
+params:
+  year: 2020
+  region: Europe
+  printcode: TRUE
+  data: file.csv
+---
+```
+
+You can also create a **GitHub Action** that will download updated data and re-render the website automatically on a schedule (e.g. once per month). This will work on any R code that will run within an hour on a simple machine.  
+
+See `report-webpage.Rmd` for a walk through on building a simple website.
+
+### Dashboard with `flexdashboard`
+
+We're going to look at a dashboard generated using the `flexdashboard` package, although there are many other packages you can use that provide different types of dashboards. Here is an [example](https://bbest.github.io/r3-exercises/report-dashboard/).
+
+This example shows a number of ecological indicators through time for a bunch of different regions of interest. These are presented as dygraphs. If you zoom in on one plot, all plots across all pages zoom too. To do that, we append each plot into an Rmarkdown document, with information about the index, data, and plot.
+
+In the [code](https://github.com/bbest/r3-exercises/tree/main/report-dashboard), we add an `indicator_expand.Rmd` file. This is a template where we can iterate through all of our indicators, and the indicator name from the `index.Rmd` file gets subbed in as a third-level header for the `{{name}}` variable. Similarly, the indicator data gets subbed in as an argument in the `read_csv()` function for the `{{data.csv}}` variable.
+
+### Book using `bookdown`
+
+Books can be created using the `bookdown` package; they can be searched and rendered as .pdf or .docx. [Here](https://bbest.github.io/r3-exercises/report-book/) is an example book.
+
+This example shows how to add equations and references.
+
+### Slideshow using `xaringan`
+
+You can create slides using the `xaringan` package. [Here](https://www.jvcasillas.com/ru_xaringan/slides/index.html#1) is an example slide deck.
+
+You can have tables, code, equations, and even interactive graphs in your slides.
+
+### Article
+
+You can create a journal article using the `rticles` package. The [example article](https://github.com/bbest/r3-exercises/blob/main/report-article/report-article.pdf) is formated for Elsevier, but there are other formats available. 
+
+
+
+
+
+
+
